@@ -1,4 +1,4 @@
-package com.kitaharaa.digitalapp.ui.theme
+package com.kitaharaa.digitalapp.common.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,14 +1,24 @@
 [versions]
-agp = "8.3.0"
-kotlin = "1.9.0"
+agp = "8.3.2"
+kotlin = "1.9.23"
 coreKtx = "1.13.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.9.0"
-composeBom = "2023.08.00"
+composeBom = "2024.04.01"
 
+hiltAndroidCompiler = "2.51.1"
+hiltAndroid = "2.51.1"
+hiltNavigationCompose = "1.2.0"
+
+ksp = "1.9.23-1.0.20"
+navigationCompose = "2.7.7"
+kotlinxSerializationJson = "1.6.3"
+ktorVersion = "2.3.9"
+
+roomCompiler = "2.6.1"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -19,13 +29,29 @@ androidx-activity-compose = { group = "androidx.activity", name = "activity-comp
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktorVersion" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorVersion" }
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorVersion" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorVersion" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
+
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomCompiler" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
+roomKsp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

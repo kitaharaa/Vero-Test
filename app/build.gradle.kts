@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -30,17 +34,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
     packaging {
         resources {
@@ -59,6 +63,24 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.kotlinx.serialization.json)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
