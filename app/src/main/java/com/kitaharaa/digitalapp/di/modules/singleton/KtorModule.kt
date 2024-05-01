@@ -1,4 +1,4 @@
-package com.kitaharaa.digitalapp.di.modules
+package com.kitaharaa.digitalapp.di.modules.singleton
 
 import android.util.Log
 import dagger.Module
@@ -40,7 +40,7 @@ class KtorModule {
     fun provideKtorClient() = HttpClient(Android) {
         // Logging
         install(Logging) {
-        /*    if (BuildConfig.DEBUG) */
+        /*    if (BuildConfig.DEBUG){} */
                 level = LogLevel.ALL
 
                 logger = object : io.ktor.client.plugins.logging.Logger {
@@ -48,7 +48,6 @@ class KtorModule {
                         Log.d("Ktor", message)
                     }
                 }
-
         }
 
         // JSON
