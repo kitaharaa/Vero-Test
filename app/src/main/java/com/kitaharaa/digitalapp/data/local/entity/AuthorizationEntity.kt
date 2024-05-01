@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class AuthorizationEntity(
     @PrimaryKey(true)
     val id: Int = 0,
-    val token: String?,
+    val token: String,
     @ColumnInfo("update_date")
     val updateDate: Long,
     @ColumnInfo("expires_in")

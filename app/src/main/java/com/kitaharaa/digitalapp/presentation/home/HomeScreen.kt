@@ -6,10 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    //todo add screen
+fun HomeScreen() {
+    val viewModel = hiltViewModel<HomeViewModel>()
+
     Text(
         modifier = Modifier.fillMaxSize(),
         text = "Hi, Barbie",
@@ -20,5 +22,5 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 @Composable
 @Preview
 fun HomeScreenPreview() {
-    HomeScreen(modifier = Modifier)
+    HomeScreen()
 }

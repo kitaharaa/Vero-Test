@@ -12,5 +12,8 @@ interface AuthorizationDao {
     fun updateData(authEntity: AuthorizationEntity)
 
     @Query("SELECT token FROM authorization_table WHERE id=0")
-    fun getToken(): Flow<String?>
+    fun getTokenFlow(): Flow<String>
+
+    @Query("SELECT token FROM authorization_table WHERE id=0")
+    fun getToken(): String
 }
