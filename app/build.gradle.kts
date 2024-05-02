@@ -64,10 +64,17 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
+    //WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation (libs.androidx.hilt.work)
+
+    implementation( libs.androidx.paging.runtime.ktx)
+    implementation (libs.androidx.paging.compose)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
