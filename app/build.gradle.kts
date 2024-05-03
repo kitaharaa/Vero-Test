@@ -67,6 +67,11 @@ dependencies {
     //WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 
+    //Paging
+
+    implementation( libs.androidx.room.paging)
+    implementation (libs.androidx.paging.compose)
+
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
