@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.map
 import com.kitaharaa.digitalapp.common.mapper.toTaskInfo
 import com.kitaharaa.digitalapp.domain.paging.PagingListItemsSource
+import com.kitaharaa.digitalapp.presentation.home.entity.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,8 +28,7 @@ class HomeViewModel @Inject constructor(
     private val _sotType = MutableStateFlow(SortType.Default)
     val sortType = _sotType.asStateFlow()
 
-    //todo check sorting
-    val mList = _searchQuery.debounce(200).combine(_sotType) { query, type ->
+    val mList = _searchQuery.debounce(400).combine(_sotType) { query, type ->
         Pager(
             PagingConfig(
                 pageSize = 5,
@@ -57,13 +57,9 @@ class HomeViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun updateSortType(type: SortType) {
-        _sotType.value = type
-    }
-}
+    fun changeSortType(it: SortType, onEnd: () -> Unit) {
+        _sotType.value = it
 
-enum class SortType {
-    Default,
-    BusinessUnitAsc,
-    BusinessUnitDesc;
+        onEnd()
+    }
 }
