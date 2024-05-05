@@ -67,8 +67,9 @@ dependencies {
     //WorkManager
     implementation(libs.androidx.work.runtime.ktx)
 
+    //qr scanning
+    implementation(libs.zxing.android.embedded)
     //Paging
-
     implementation( libs.androidx.room.paging)
     implementation (libs.androidx.paging.compose)
 
