@@ -40,7 +40,7 @@ class WorkerUseCase @Inject constructor(
 
             workManager.enqueue(authWork)
 
-               val taskUpdatingWork = PeriodicWorkRequestBuilder<TasksUpdateWorker>(
+            val taskUpdatingWork = PeriodicWorkRequestBuilder<TasksUpdateWorker>(
                 Duration.ofHours(60)
             )
                 .setBackoffCriteria(BackoffPolicy.LINEAR, duration = Duration.ofSeconds(5L))

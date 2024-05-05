@@ -30,6 +30,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.kitaharaa.digitalapp.R
@@ -49,6 +51,8 @@ fun HomeScreen() {
     val sortType by viewModel.sortType.collectAsState()
     val pagingDataFlow by viewModel.mList.collectAsState(initial = flowOf())
 
+    val isLoading by viewModel.isRefreshing.collectAsState()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     val pagingData = pagingDataFlow.collectAsLazyPagingItems()
 
     var shouldShowFilteringDialog by remember {
@@ -102,47 +106,52 @@ fun HomeScreen() {
             }
         }
     ) {
-        LazyColumn(
-            modifier = Modifier.padding(it)
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = viewModel::onRefreshData
         ) {
-            item {
-                Row(
-                    modifier = Modifier
-                        .padding(
-                            vertical = 7.dp,
-                            horizontal = 10.dp
-                        ),
-                    horizontalArrangement = Arrangement.spacedBy(7.dp)
-                ) {
+            LazyColumn(
+                modifier = Modifier.padding(it)
+            ) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .padding(
+                                vertical = 7.dp,
+                                horizontal = 10.dp
+                            ),
+                        horizontalArrangement = Arrangement.spacedBy(7.dp)
+                    ) {
 
-                    OutlinedTextField(
-                        modifier = Modifier.weight(8f),
-                        value = searchQuery,
-                        onValueChange = viewModel::onQueryUpdate,
-                        maxLines = 1
-                    )
-
-                    IconButton(
-                        modifier = Modifier.weight(1f),
-                        onClick = { shouldShowFilteringDialog = true }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_filter_list_24),
-                            contentDescription = "Change filtering"
+                        OutlinedTextField(
+                            modifier = Modifier.weight(8f),
+                            value = searchQuery,
+                            onValueChange = viewModel::onQueryUpdate,
+                            maxLines = 1
                         )
+
+                        IconButton(
+                            modifier = Modifier.weight(1f),
+                            onClick = { shouldShowFilteringDialog = true }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_filter_list_24),
+                                contentDescription = "Change filtering"
+                            )
+                        }
                     }
                 }
-            }
 
-            items(
-                count = pagingData.itemCount,
-                key = pagingData.itemKey { taskInfo ->
-                    taskInfo.id
-                },
-                contentType = pagingData.itemContentType { "Tasks" }
-            ) { index ->
+                items(
+                    count = pagingData.itemCount,
+                    key = pagingData.itemKey { taskInfo ->
+                        taskInfo.id
+                    },
+                    contentType = pagingData.itemContentType { "Tasks" }
+                ) { index ->
 
-                pagingData[index]?.let { info ->
-                    TaskInfoCard(info)
+                    pagingData[index]?.let { info ->
+                        TaskInfoCard(info)
+                    }
                 }
             }
         }

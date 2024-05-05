@@ -69,6 +69,10 @@ dependencies {
 
     //qr scanning
     implementation(libs.zxing.android.embedded)
+
+    //swipe to refresh
+    implementation (libs.accompanist.swiperefresh)
+
     //Paging
     implementation( libs.androidx.room.paging)
     implementation (libs.androidx.paging.compose)
