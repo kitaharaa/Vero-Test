@@ -24,11 +24,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.kitaharaa.digitalapp.R
 import com.kitaharaa.digitalapp.common.sort_types.SortType
+import com.kitaharaa.digitalapp.common.theme.FilterCardPadding
+import com.kitaharaa.digitalapp.common.theme.FilterItemSpacing
+import com.kitaharaa.digitalapp.common.theme.FilterRowHorizontalPadding
+import com.kitaharaa.digitalapp.common.theme.FilterRowVerticalPadding
+import com.kitaharaa.digitalapp.common.theme.FilterTitlePadding
 
 /*
 * Dialog with filtering types
@@ -44,9 +48,13 @@ fun FilterDialog(
     }
 
     Dialog(properties = DialogProperties(), onDismissRequest = onDismiss) {
-        Card(modifier = Modifier.padding(13.dp)) {
+        Card(
+            modifier = Modifier.padding(
+                FilterCardPadding
+            )
+        ) {
             Text(
-                modifier = Modifier.padding(15.dp),
+                modifier = Modifier.padding(FilterTitlePadding),
                 text = stringResource(R.string.list_filtering),
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             )
@@ -63,7 +71,7 @@ fun FilterDialog(
                         modifier = Modifier.weight(2f),
                         selected = selectedSortType == sortType,
                         onClick = { selectedSortType = sortType })
-                    Spacer(modifier = Modifier.width(15.dp))
+                    Spacer(modifier = Modifier.width(FilterItemSpacing))
 
                     Text(
                         modifier = Modifier.weight(6f),
@@ -76,8 +84,11 @@ fun FilterDialog(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 14.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.End),
+                    .padding(
+                        vertical = FilterRowVerticalPadding,
+                        horizontal = FilterRowHorizontalPadding
+                    ),
+                horizontalArrangement = Arrangement.spacedBy(FilterItemSpacing, Alignment.End),
             ) {
                 Button(onClick = onDismiss) {
                     Text(

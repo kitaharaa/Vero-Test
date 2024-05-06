@@ -10,7 +10,6 @@ class RefreshDataUseCase @Inject constructor(
     private val authorizationDao: AuthorizationDao,
     private val refreshData: TaskSource
 ) {
-    suspend fun refreshData() = withContext(IO){
-        refreshData.refreshData(authorizationDao.getToken())
-    }
+    suspend fun refreshData() =
+        withContext(IO) { refreshData.refreshData(authorizationDao.getToken()) }
 }

@@ -19,6 +19,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kitaharaa.digitalapp.R
+import com.kitaharaa.digitalapp.common.theme.LoadingIconSize
 
 @Composable
 fun LoadingProgressBar(
@@ -36,7 +37,7 @@ fun LoadingProgressBar(
             CircularProgressIndicator()
         } else {
             Icon(
-                modifier = Modifier.size(90.dp),
+                modifier = Modifier.size(LoadingIconSize),
                 imageVector = drawable,
                 contentDescription = stringResource(R.string.error_icon)
             )

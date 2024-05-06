@@ -6,15 +6,15 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -36,6 +36,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.kitaharaa.digitalapp.R
+import com.kitaharaa.digitalapp.common.theme.SwipeRefreshWorkDistance
+import com.kitaharaa.digitalapp.common.theme.TaskOuterHorizontalPadding
+import com.kitaharaa.digitalapp.common.theme.TaskOuterVerticalPadding
 import com.kitaharaa.digitalapp.isCameraPermissionGranted
 import com.kitaharaa.digitalapp.presentation.home.composable.CustomSearchBar
 import com.kitaharaa.digitalapp.presentation.home.composable.FilterDialog
@@ -45,7 +48,6 @@ import com.kitaharaa.digitalapp.presentation.qr.CaptureActivity
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -56,6 +58,7 @@ fun HomeScreen() {
     val pagingDataFlow by viewModel.mList.collectAsState(initial = flowOf())
 
     val isLoading by viewModel.isRefreshing.collectAsState()
+
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     val pagingData = pagingDataFlow.collectAsLazyPagingItems()
 
@@ -65,7 +68,7 @@ fun HomeScreen() {
 
     val options by lazy {
         ScanOptions().apply {
-            setPrompt("Scanning QR Code")
+            setPrompt(context.getString(R.string.scanning_qr_code))
             setBeepEnabled(true)
             setOrientationLocked(true)
             captureActivity = CaptureActivity::class.java
@@ -85,22 +88,15 @@ fun HomeScreen() {
             if (isGranted) {
                 barLauncher.launch(options)
             } else {
-                Toast.makeText(context,
-                    context.getString(R.string.permission_was_not_granted), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.permission_was_not_granted), Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
-                        shouldShowFilteringDialog = true
-                    }
-                }
-            )
-        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
@@ -120,14 +116,18 @@ fun HomeScreen() {
             }
         }
     ) {
-        SwipeRefresh(
-            state = swipeRefreshState,
-            onRefresh = viewModel::onRefreshData
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
+            CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
+                shouldShowFilteringDialog = true
+            }
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = viewModel::onRefreshData,
+                refreshTriggerDistance = SwipeRefreshWorkDistance
             ) {
-
                 when {
                     pagingData.loadState.refresh is LoadState.Loading -> {
                         //first loading
@@ -145,7 +145,6 @@ fun HomeScreen() {
                     }
 
                     pagingData.loadState.append is LoadState.Loading -> {
-                        //add progress
                         LoadingProgressBar(
                             text = stringResource(R.string.loading),
                             showProgressBar = true
@@ -155,6 +154,11 @@ fun HomeScreen() {
                     else -> {
                         LazyColumn(
                             modifier = Modifier.padding(it),
+                            contentPadding = PaddingValues(
+                                vertical = TaskOuterVerticalPadding,
+                                horizontal = TaskOuterHorizontalPadding
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(TaskOuterVerticalPadding)
                         ) {
                             items(
                                 count = pagingData.itemCount,
