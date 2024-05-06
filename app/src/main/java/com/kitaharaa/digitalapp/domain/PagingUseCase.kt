@@ -20,7 +20,7 @@ class PagingUseCase @Inject constructor(
     fun getPagingItemsFlow(query: String, type: SortType): Flow<PagingData<TaskInfo>> {
         return Pager(
             PagingConfig(
-                pageSize = 25,
+                pageSize = 5,
                 enablePlaceholders = true,
             ),
             pagingSourceFactory = {

@@ -144,13 +144,6 @@ fun HomeScreen() {
                         )
                     }
 
-                    pagingData.loadState.append is LoadState.Loading -> {
-                        LoadingProgressBar(
-                            text = stringResource(R.string.loading),
-                            showProgressBar = true
-                        )
-                    }
-
                     else -> {
                         LazyColumn(
                             modifier = Modifier.padding(it),
@@ -170,6 +163,15 @@ fun HomeScreen() {
 
                                 pagingData[index]?.let { info ->
                                     TaskInfoCard(info)
+                                }
+                            }
+
+                            item {
+                                if (pagingData.loadState.append is LoadState.Loading) {
+                                    LoadingProgressBar(
+                                        text = stringResource(R.string.loading),
+                                        showProgressBar = true
+                                    )
                                 }
                             }
                         }
