@@ -3,6 +3,7 @@ package com.kitaharaa.digitalapp.presentation.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.kitaharaa.digitalapp.common.sort_types.SortType
 import com.kitaharaa.digitalapp.domain.PagingUseCase
 import com.kitaharaa.digitalapp.domain.RefreshDataUseCase
@@ -30,8 +31,9 @@ class HomeViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    val mList = _searchQuery.debounce(700).combine(_sortType) { query, type ->
+    val mList = _searchQuery.debounce(500).combine(_sortType) { query, type ->
         pagingUseCase.getPagingItemsFlow(query, type)
+            .cachedIn(viewModelScope)
     }
 
     fun onQueryUpdate(query: String) {

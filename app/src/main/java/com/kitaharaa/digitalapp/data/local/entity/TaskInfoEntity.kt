@@ -37,20 +37,22 @@ data class TaskInfoEntity(
     @ColumnInfo("working_time")
     val workingTime: String? = null // null
 ) {
-    fun toTaskInfo(): TaskInfo {
+    fun toTaskInfo(): TaskInfo  {
         val color = try {
-            Color(android.graphics.Color.parseColor(colorCode))
-        } catch (e: StringIndexOutOfBoundsException) {
-            Log.e("TaskInfoMapper", "toTaskInfo: $e")
+            if (colorCode.isNullOrBlank()) Gray
 
-            null
+            Color(android.graphics.Color.parseColor(colorCode))
+        } catch (e: Exception) {
+            Log.e("TaskInfoMapper", "toTaskInfo: $e with color = {$colorCode}")
+
+            Gray
         }
 
-        return TaskInfo(
+       return TaskInfo(
             id = id,
             businessUnit = businessUnit ?: "", // Gerüstbau
             businessUnitKey = businessUnitKey ?: "", // Gerüstbau
-            color = color ?: Gray, // #1df70e
+            color = color, // #1df70e
             description = description ?: "", // Gerüste montieren.
             isAvailableInTimeTrackingKioskMode = isAvailableInTimeTrackingKioskMode
                 ?: false, // false
@@ -61,7 +63,6 @@ data class TaskInfoEntity(
             title = title ?: "", // Gerüst montieren
             wageType = wageType ?: "", // 10 Aufbau
             workingTime = workingTime ?: "" // null
-
         )
     }
 }

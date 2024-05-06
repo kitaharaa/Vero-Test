@@ -28,7 +28,9 @@ class TasksUpdateWorker @AssistedInject constructor(
         taskSource.refreshData(token)
 
         Result.success()
-    } catch (e: Throwable) {
-        Result.failure()
+    } catch (e: Exception) {
+        if (e is NullPointerException) Result.retry()
+
+        Result.retry()
     }
 }

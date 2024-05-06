@@ -12,11 +12,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -50,7 +48,6 @@ import com.kitaharaa.digitalapp.presentation.qr.CaptureActivity
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -100,15 +97,6 @@ fun HomeScreen() {
         }
 
     Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
-                        shouldShowFilteringDialog = true
-                    }
-                }
-            )
-        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
@@ -132,35 +120,38 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            when {
-                pagingData.loadState.refresh is LoadState.Loading -> {
-                    //first loading
-                    LoadingProgressBar(
-                        text = stringResource(R.string.initial_loading),
-                        showProgressBar = true
-                    )
-                }
+            CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
+                shouldShowFilteringDialog = true
+            }
+            SwipeRefresh(
+                state = swipeRefreshState,
+                onRefresh = viewModel::onRefreshData,
+                refreshTriggerDistance = SwipeRefreshWorkDistance
+            ) {
+                when {
+                    pagingData.loadState.refresh is LoadState.Loading -> {
+                        //first loading
+                        LoadingProgressBar(
+                            text = stringResource(R.string.initial_loading),
+                            showProgressBar = true
+                        )
+                    }
 
-                pagingData.itemCount == 0 -> {
-                    LoadingProgressBar(
-                        text = stringResource(R.string.there_is_no_data),
-                        showProgressBar = false
-                    )
-                }
+                    pagingData.itemCount == 0 -> {
+                        LoadingProgressBar(
+                            text = stringResource(R.string.there_is_no_data),
+                            showProgressBar = false
+                        )
+                    }
 
-                pagingData.loadState.append is LoadState.Loading -> {
-                    LoadingProgressBar(
-                        text = stringResource(R.string.loading),
-                        showProgressBar = true
-                    )
-                }
+                    pagingData.loadState.append is LoadState.Loading -> {
+                        LoadingProgressBar(
+                            text = stringResource(R.string.loading),
+                            showProgressBar = true
+                        )
+                    }
 
-                else -> {
-                    SwipeRefresh(
-                        state = swipeRefreshState,
-                        onRefresh = viewModel::onRefreshData,
-                        refreshTriggerDistance = SwipeRefreshWorkDistance
-                    ) {
+                    else -> {
                         LazyColumn(
                             modifier = Modifier.padding(it),
                             contentPadding = PaddingValues(
