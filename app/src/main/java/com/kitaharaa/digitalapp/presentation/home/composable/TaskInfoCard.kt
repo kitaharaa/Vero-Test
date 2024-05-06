@@ -54,8 +54,7 @@ fun TaskInfoCard(info: TaskInfo) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp),
-                style = MaterialTheme.typography.titleMedium,
-                color = textColor,
+                style = MaterialTheme.typography.titleMedium.copy(color = textColor),
                 text = stringResource(R.string.task, info.task)
             )
             Text(
@@ -63,8 +62,7 @@ fun TaskInfoCard(info: TaskInfo) {
                     .fillMaxWidth()
                     .heightIn(min = 10.dp)
                     .padding(horizontal = 10.dp),
-                style = MaterialTheme.typography.titleMedium,
-                color = textColor,
+                style = MaterialTheme.typography.titleMedium.copy(textColor),
                 text = info.description
             )
         }
