@@ -42,15 +42,18 @@ class HomeViewModel @Inject constructor(
                 enablePlaceholders = false,
             ),
             pagingSourceFactory = {
-                if (_searchQuery.value.isNotBlank()) _sortType.value = SortType.Default
-
                 when (type) {
-                    SortType.Default -> if (_searchQuery.value.isNotBlank()) pagingListItemsSource.getDefaultWithQuery(
-                        _searchQuery.value
-                    ) else pagingListItemsSource.getDefault()
+                    SortType.Default -> pagingListItemsSource.getDefaultWithQuery(
+                        query
+                    )
 
-                    SortType.BusinessUnitAsc -> pagingListItemsSource.getSortedByBusinessUnitAsc()
-                    SortType.BusinessUnitDesc -> pagingListItemsSource.getSortedByBusinessUnitDesc()
+                    SortType.BusinessUnitAsc -> pagingListItemsSource.getSortedByBusinessUnitAsc(
+                        query
+                    )
+
+                    SortType.BusinessUnitDesc -> pagingListItemsSource.getSortedByBusinessUnitDesc(
+                        query
+                    )
                 }
             }
         ).flow.map {

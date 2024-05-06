@@ -7,8 +7,7 @@ class PagingListItemsSource @Inject constructor(
     private val tasksDao: TaskInfoDao
 ) {
 
-    fun getSortedByBusinessUnitAsc() = tasksDao.getAllSortedByBusinessUnitAsc()
-    fun getSortedByBusinessUnitDesc() = tasksDao.getAllSortedByBusinessUnitDesc()
+    fun getSortedByBusinessUnitAsc(query: String) = tasksDao.getAllSortedByBusinessUnitAsc(query)
+    fun getSortedByBusinessUnitDesc(query: String) = tasksDao.getAllSortedByBusinessUnitDesc(query)
     fun getDefaultWithQuery(query: String) = tasksDao.getAllTaskSortedByDefaultWithQuery(query)
-    fun getDefault() = tasksDao.getAllTaskSortedByDefault()
 }

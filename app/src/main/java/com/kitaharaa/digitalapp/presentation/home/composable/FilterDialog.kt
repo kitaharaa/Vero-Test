@@ -63,7 +63,6 @@ fun FilterDialog(
 
                     Text(
                         modifier = Modifier.weight(6f),
-
                         text = sortType.typeName,
                         style = MaterialTheme.typography.bodyMedium
                     )
