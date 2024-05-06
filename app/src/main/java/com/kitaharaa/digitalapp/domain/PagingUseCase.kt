@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/*
+* Supply data on diff filtering & searching
+*/
 class PagingUseCase @Inject constructor(
     private val pagingListItemsSource: PagingListItemsSource
 ) {

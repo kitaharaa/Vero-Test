@@ -22,7 +22,6 @@ class AuthorizationWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         val data = authSource.getAuthorizationData() ?: return Result.retry()
 
-        Log.e(TAG, "doWork: $data")
         return try {
             authSource.saveAuthorizationData(data)
 

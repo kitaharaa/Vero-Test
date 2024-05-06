@@ -16,6 +16,9 @@ import kotlinx.coroutines.launch
 import java.time.Duration
 import javax.inject.Inject
 
+/*
+* Use case for checking and running workers while app start up
+*/
 class WorkerUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val authSource: AuthorizationSource,

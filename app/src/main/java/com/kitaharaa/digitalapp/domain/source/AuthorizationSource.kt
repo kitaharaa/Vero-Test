@@ -51,7 +51,7 @@ class AuthorizationSource @Inject constructor(
         return try {
             authorizationDao.getValidIn()
         } catch (e: Exception) {
-            Log.e(TAG, "getTokenExpireTimeInSeconds: $e", )
+            Log.e(TAG, "getTokenExpireTimeInSeconds: $e" )
         }
     }
 

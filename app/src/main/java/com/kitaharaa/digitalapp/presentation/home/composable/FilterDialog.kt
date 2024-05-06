@@ -28,6 +28,9 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.kitaharaa.digitalapp.presentation.home.entity.SortType
 
+/*
+* Dialog with filtering types
+*/
 @Composable
 fun FilterDialog(
     currentSortType: SortType,
