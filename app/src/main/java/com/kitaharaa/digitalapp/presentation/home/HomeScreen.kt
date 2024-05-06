@@ -6,14 +6,10 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
@@ -36,6 +31,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.kitaharaa.digitalapp.R
 import com.kitaharaa.digitalapp.isCameraPermissionGranted
+import com.kitaharaa.digitalapp.presentation.home.composable.CustomSearchBar
 import com.kitaharaa.digitalapp.presentation.home.composable.FilterDialog
 import com.kitaharaa.digitalapp.presentation.home.composable.TaskInfoCard
 import com.kitaharaa.digitalapp.presentation.qr.CaptureActivity
@@ -114,30 +110,8 @@ fun HomeScreen() {
                 modifier = Modifier.padding(it)
             ) {
                 item {
-                    Row(
-                        modifier = Modifier
-                            .padding(
-                                vertical = 7.dp,
-                                horizontal = 10.dp
-                            ),
-                        horizontalArrangement = Arrangement.spacedBy(7.dp)
-                    ) {
-
-                        OutlinedTextField(
-                            modifier = Modifier.weight(8f),
-                            value = searchQuery,
-                            onValueChange = viewModel::onQueryUpdate,
-                            maxLines = 1
-                        )
-
-                        IconButton(
-                            modifier = Modifier.weight(1f),
-                            onClick = { shouldShowFilteringDialog = true }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_filter_list_24),
-                                contentDescription = "Change filtering"
-                            )
-                        }
+                    CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
+                        shouldShowFilteringDialog = true
                     }
                 }
 
@@ -170,7 +144,6 @@ fun HomeScreen() {
         )
     }
 }
-
 
 @Composable
 @Preview
