@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    val mList = _searchQuery.debounce(1000).combine(_sortType) { query, type ->
+    val mList = _searchQuery.debounce(700).combine(_sortType) { query, type ->
         pagingUseCase.getPagingItemsFlow(query, type)
     }
 
@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
             try {
                 refreshDataUseCase.refreshData()
             } catch (e: Exception) {
-                Log.e("HomeViewModel", "onRefreshData: e")
+                Log.e("HomeViewModel", "onRefreshData: $e")
             } finally {
                 _isRefreshing.value = false
             }

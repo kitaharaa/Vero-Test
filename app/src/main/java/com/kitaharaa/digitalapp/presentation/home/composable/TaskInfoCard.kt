@@ -1,9 +1,7 @@
 package com.kitaharaa.digitalapp.presentation.home.composable
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
@@ -22,20 +20,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kitaharaa.digitalapp.R
+import com.kitaharaa.digitalapp.common.theme.MinTextHeight
+import com.kitaharaa.digitalapp.common.theme.TaskCardContentVerticalHorizontal
+import com.kitaharaa.digitalapp.common.theme.TaskCardVerticalPadding
 import com.kitaharaa.digitalapp.domain.entity.TaskInfo
 
 @Composable
 fun TaskInfoCard(info: TaskInfo) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 5.dp, horizontal = 10.dp),
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = info.color)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 15.dp, vertical = 7.dp),
+                .padding(
+                    horizontal = TaskCardContentVerticalHorizontal,
+                    vertical = TaskCardVerticalPadding
+                ),
         ) {
             val textColor = remember { if (info.color.luminance() > 0.5) Black else White }
 
@@ -46,22 +49,25 @@ fun TaskInfoCard(info: TaskInfo) {
                 style = MaterialTheme.typography.titleMedium.copy(color = textColor),
                 text = info.title
             )
-            HorizontalDivider(Modifier.padding(horizontal = 2.dp, vertical = 7.dp))
 
-            Spacer(Modifier.height(8.dp))
+            HorizontalDivider(
+                Modifier.padding(
+                    vertical = TaskCardVerticalPadding
+                )
+            )
 
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp),
+                    .padding(vertical = TaskCardVerticalPadding),
                 style = MaterialTheme.typography.titleMedium.copy(color = textColor),
                 text = stringResource(R.string.task, info.task)
             )
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 10.dp)
-                    .padding(horizontal = 10.dp),
+                    .heightIn(min = MinTextHeight)
+                    .padding(horizontal = TaskCardContentVerticalHorizontal),
                 style = MaterialTheme.typography.titleMedium.copy(textColor),
                 text = info.description
             )

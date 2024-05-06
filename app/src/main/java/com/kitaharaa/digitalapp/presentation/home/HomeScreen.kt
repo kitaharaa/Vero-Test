@@ -6,7 +6,9 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,6 +38,9 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.kitaharaa.digitalapp.R
+import com.kitaharaa.digitalapp.common.theme.SwipeRefreshWorkDistance
+import com.kitaharaa.digitalapp.common.theme.TaskOuterHorizontalPadding
+import com.kitaharaa.digitalapp.common.theme.TaskOuterVerticalPadding
 import com.kitaharaa.digitalapp.isCameraPermissionGranted
 import com.kitaharaa.digitalapp.presentation.home.composable.CustomSearchBar
 import com.kitaharaa.digitalapp.presentation.home.composable.FilterDialog
@@ -56,6 +61,7 @@ fun HomeScreen() {
     val pagingDataFlow by viewModel.mList.collectAsState(initial = flowOf())
 
     val isLoading by viewModel.isRefreshing.collectAsState()
+
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     val pagingData = pagingDataFlow.collectAsLazyPagingItems()
 
@@ -65,7 +71,7 @@ fun HomeScreen() {
 
     val options by lazy {
         ScanOptions().apply {
-            setPrompt("Scanning QR Code")
+            setPrompt(context.getString(R.string.scanning_qr_code))
             setBeepEnabled(true)
             setOrientationLocked(true)
             captureActivity = CaptureActivity::class.java
@@ -85,8 +91,10 @@ fun HomeScreen() {
             if (isGranted) {
                 barLauncher.launch(options)
             } else {
-                Toast.makeText(context,
-                    context.getString(R.string.permission_was_not_granted), Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.permission_was_not_granted), Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -120,41 +128,46 @@ fun HomeScreen() {
             }
         }
     ) {
-        SwipeRefresh(
-            state = swipeRefreshState,
-            onRefresh = viewModel::onRefreshData
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-            ) {
+            when {
+                pagingData.loadState.refresh is LoadState.Loading -> {
+                    //first loading
+                    LoadingProgressBar(
+                        text = stringResource(R.string.initial_loading),
+                        showProgressBar = true
+                    )
+                }
 
-                when {
-                    pagingData.loadState.refresh is LoadState.Loading -> {
-                        //first loading
-                        LoadingProgressBar(
-                            text = stringResource(R.string.initial_loading),
-                            showProgressBar = true
-                        )
-                    }
+                pagingData.itemCount == 0 -> {
+                    LoadingProgressBar(
+                        text = stringResource(R.string.there_is_no_data),
+                        showProgressBar = false
+                    )
+                }
 
-                    pagingData.itemCount == 0 -> {
-                        LoadingProgressBar(
-                            text = stringResource(R.string.there_is_no_data),
-                            showProgressBar = false
-                        )
-                    }
+                pagingData.loadState.append is LoadState.Loading -> {
+                    LoadingProgressBar(
+                        text = stringResource(R.string.loading),
+                        showProgressBar = true
+                    )
+                }
 
-                    pagingData.loadState.append is LoadState.Loading -> {
-                        //add progress
-                        LoadingProgressBar(
-                            text = stringResource(R.string.loading),
-                            showProgressBar = true
-                        )
-                    }
-
-                    else -> {
+                else -> {
+                    SwipeRefresh(
+                        state = swipeRefreshState,
+                        onRefresh = viewModel::onRefreshData,
+                        refreshTriggerDistance = SwipeRefreshWorkDistance
+                    ) {
                         LazyColumn(
                             modifier = Modifier.padding(it),
+                            contentPadding = PaddingValues(
+                                vertical = TaskOuterVerticalPadding,
+                                horizontal = TaskOuterHorizontalPadding
+                            ),
+                            verticalArrangement = Arrangement.spacedBy(TaskOuterVerticalPadding)
                         ) {
                             items(
                                 count = pagingData.itemCount,

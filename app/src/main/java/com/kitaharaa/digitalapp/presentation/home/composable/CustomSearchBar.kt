@@ -14,8 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.kitaharaa.digitalapp.R
+import com.kitaharaa.digitalapp.common.theme.SearchBarArrangement
+import com.kitaharaa.digitalapp.common.theme.SearchBarHorizontalPadding
+import com.kitaharaa.digitalapp.common.theme.SearchBarVerticalPadding
 import kotlin.reflect.KFunction1
 
 @Composable
@@ -27,10 +29,10 @@ fun CustomSearchBar(
     Row(
         modifier = Modifier
             .padding(
-                vertical = 7.dp,
-                horizontal = 10.dp
+                vertical = SearchBarVerticalPadding,
+                horizontal = SearchBarHorizontalPadding
             ),
-        horizontalArrangement = Arrangement.spacedBy(7.dp),
+        horizontalArrangement = Arrangement.spacedBy(SearchBarArrangement),
         verticalAlignment = Alignment.CenterVertically
     ) {
 
@@ -51,7 +53,8 @@ fun CustomSearchBar(
 
         IconButton(
             modifier = Modifier.weight(1f),
-            onClick = openFilterDialog) {
+            onClick = openFilterDialog
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_filter_list_24),
                 contentDescription = stringResource(R.string.change_filtering)
@@ -62,8 +65,8 @@ fun CustomSearchBar(
 
 @Composable
 @Preview(showSystemUi = true)
-fun CustomSearchBarPreview () {
+fun CustomSearchBarPreview() {
     fun updateFunction(onUpdate: String) {}
 
-    CustomSearchBar("Interesting task", ::updateFunction) {}
+    CustomSearchBar(stringResource(R.string.interesting_task), ::updateFunction) {}
 }
