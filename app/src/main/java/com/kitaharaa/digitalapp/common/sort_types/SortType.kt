@@ -1,4 +1,4 @@
-package com.kitaharaa.digitalapp.presentation.home.entity
+package com.kitaharaa.digitalapp.common.sort_types
 
 enum class SortType(val typeName: String) {
     Default("Default"),

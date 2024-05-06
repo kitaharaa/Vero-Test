@@ -29,7 +29,7 @@ import javax.inject.Singleton
 
 const val DEFAULT_MAX_RETRIES = 2
 const val time = 15_000L
-
+const val KTOR_LOG = "Ktor"
 @Module
 @InstallIn(SingletonComponent::class)
 class KtorModule {
@@ -38,12 +38,11 @@ class KtorModule {
     fun provideKtorClient() = HttpClient(Android) {
         // Logging
         install(Logging) {
-        /*    if (BuildConfig.DEBUG){} */
                 level = LogLevel.ALL
 
                 logger = object : io.ktor.client.plugins.logging.Logger {
                     override fun log(message: String) {
-                        Log.d("Ktor", message)
+                        Log.d(KTOR_LOG, message)
                     }
                 }
         }

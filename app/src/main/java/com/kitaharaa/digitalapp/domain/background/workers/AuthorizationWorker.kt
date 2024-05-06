@@ -1,7 +1,6 @@
 package com.kitaharaa.digitalapp.domain.background.workers
 
 import android.content.Context
-import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -25,14 +24,9 @@ class AuthorizationWorker @AssistedInject constructor(
         return try {
             authSource.saveAuthorizationData(data)
 
-            Log.e(TAG, "doWork: success")
             Result.success()
         } catch (e: Exception) {
-            Result.retry()
+            Result.failure()
         }
-    }
-
-    companion object {
-        private const val TAG = "AuthorizationWorker"
     }
 }

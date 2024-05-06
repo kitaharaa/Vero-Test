@@ -3,7 +3,6 @@ package com.kitaharaa.digitalapp.domain.source
 import android.util.Log
 import androidx.room.withTransaction
 import com.kitaharaa.digitalapp.common.InvalidRemoteData
-import com.kitaharaa.digitalapp.common.mapper.toTaskEntity
 import com.kitaharaa.digitalapp.data.local.AppDatabase
 import com.kitaharaa.digitalapp.data.local.dao.TaskInfoDao
 import com.kitaharaa.digitalapp.data.remote.TasksDataSource

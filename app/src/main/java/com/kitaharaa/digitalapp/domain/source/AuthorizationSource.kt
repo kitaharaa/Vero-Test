@@ -2,10 +2,9 @@ package com.kitaharaa.digitalapp.domain.source
 
 import android.util.Log
 import com.kitaharaa.digitalapp.common.AuthorizationParameterException
-import com.kitaharaa.digitalapp.common.mapper.toAuthEntity
 import com.kitaharaa.digitalapp.data.local.dao.AuthorizationDao
 import com.kitaharaa.digitalapp.data.remote.AuthorizationDataSource
-import com.kitaharaa.digitalapp.data.remote.entity.auth.AuthorizationResponse
+import com.kitaharaa.digitalapp.data.remote.entity.auth.AuthorizationDto
 import java.util.Date
 import javax.inject.Inject
 
@@ -43,7 +42,7 @@ class AuthorizationSource @Inject constructor(
         null
     }
 
-    suspend fun saveAuthorizationData(response: AuthorizationResponse) {
+    suspend fun saveAuthorizationData(response: AuthorizationDto) {
         authorizationDao.updateData(response.toAuthEntity())
     }
 

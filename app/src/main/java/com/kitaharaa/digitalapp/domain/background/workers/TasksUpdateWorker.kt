@@ -19,6 +19,7 @@ class TasksUpdateWorker @AssistedInject constructor(
     private val taskSource: TaskSource,
     private val authorizationDao: AuthorizationDao,
 ) : CoroutineWorker(applicationContext, params) {
+
     override suspend fun doWork(): Result = try {
         val token = authorizationDao.getToken()
 
@@ -28,7 +29,6 @@ class TasksUpdateWorker @AssistedInject constructor(
 
         Result.success()
     } catch (e: Throwable) {
-
-        Result.retry()
+        Result.failure()
     }
 }

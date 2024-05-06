@@ -10,6 +10,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+private const val DATABASE_NAME = "vero_app_database"
+
 @Module
 @InstallIn(SingletonComponent::class)
 class DatabaseModule {
@@ -18,7 +20,7 @@ class DatabaseModule {
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase = Room.databaseBuilder(
         context,
         AppDatabase::class.java,
-        "vero_app_database"
+        DATABASE_NAME
     ).build()
 
     @Provides

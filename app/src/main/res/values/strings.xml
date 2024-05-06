@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">VeroTestTask</string>
+    <string name="list_filtering">List Filtering</string>
+    <string name="cancel">Cancel</string>
+    <string name="sort">Sort</string>
+    <string name="floating_action_button">Floating action button.</string>
+    <string name="change_filtering">Change filtering</string>
+    <string name="initial_loading">Initial loading</string>
+    <string name="there_is_no_data">There is no data</string>
+    <string name="loading">Loading</string>
+    <string name="error_icon">Error Icon</string>
+    <string name="task">Task: %s</string>
+    <string name="search_for_task">Search for task</string>
+    <string name="task_placeholder">task...</string>
+    <string name="permission_was_not_granted">Permission was not granted!</string>
+    <string name="tasks">Tasks</string>
 </resources>
