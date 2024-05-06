@@ -3,9 +3,9 @@ package com.kitaharaa.digitalapp.presentation.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kitaharaa.digitalapp.common.sort_types.SortType
 import com.kitaharaa.digitalapp.domain.PagingUseCase
 import com.kitaharaa.digitalapp.domain.RefreshDataUseCase
-import com.kitaharaa.digitalapp.presentation.home.entity.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
-    val mList = _searchQuery.debounce(400).combine(_sortType) { query, type ->
+    val mList = _searchQuery.debounce(1000).combine(_sortType) { query, type ->
         pagingUseCase.getPagingItemsFlow(query, type)
     }
 

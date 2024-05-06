@@ -21,12 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.kitaharaa.digitalapp.presentation.home.entity.SortType
+import com.kitaharaa.digitalapp.R
+import com.kitaharaa.digitalapp.common.sort_types.SortType
 
 /*
 * Dialog with filtering types
@@ -41,13 +43,12 @@ fun FilterDialog(
         mutableStateOf(currentSortType)
     }
 
-    Dialog(properties = DialogProperties(), onDismissRequest = { onDismiss() }) {
+    Dialog(properties = DialogProperties(), onDismissRequest = onDismiss) {
         Card(modifier = Modifier.padding(13.dp)) {
             Text(
                 modifier = Modifier.padding(15.dp),
-                text = "List Filtering",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold
+                text = stringResource(R.string.list_filtering),
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
             )
 
             SortType.entries.forEach { sortType ->
@@ -80,7 +81,7 @@ fun FilterDialog(
             ) {
                 Button(onClick = onDismiss) {
                     Text(
-                        text = "Cancel",
+                        text = stringResource(R.string.cancel),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -91,7 +92,7 @@ fun FilterDialog(
                     }
                 ) {
                     Text(
-                        text = "Sort",
+                        text = stringResource(R.string.sort),
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

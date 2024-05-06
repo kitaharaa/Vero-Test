@@ -4,10 +4,11 @@ package com.kitaharaa.digitalapp.data.remote.entity.task
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import androidx.annotation.Keep
+import com.kitaharaa.digitalapp.data.local.entity.TaskInfoEntity
 
 @Keep
 @Serializable
-data class TaskInfoResponse(
+data class TaskInfoDto(
     @SerialName("businessUnit")
     val businessUnit: String? = null, // Gerüstbau
     @SerialName("BusinessUnitKey")
@@ -32,4 +33,21 @@ data class TaskInfoResponse(
     val wageType: String? = null, // 10 Aufbau
     @SerialName("workingTime")
     val workingTime: String? = null // null
-)
+) {
+    fun toTaskEntity(): TaskInfoEntity {
+        return TaskInfoEntity(
+            businessUnit = businessUnit,
+            businessUnitKey = businessUnitKey,
+            colorCode = colorCode,
+            description = description,
+            isAvailableInTimeTrackingKioskMode = isAvailableInTimeTrackingKioskMode,
+            parentTaskID = parentTaskID,
+            preplanningBoardQuickSelect = preplanningBoardQuickSelect,
+            sort = sort,
+            task = task,
+            title = title,
+            wageType = wageType,
+            workingTime = workingTime
+        )
+    }
+}

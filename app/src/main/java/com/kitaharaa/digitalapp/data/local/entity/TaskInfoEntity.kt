@@ -1,8 +1,12 @@
 package com.kitaharaa.digitalapp.data.local.entity
 
+import android.util.Log
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.kitaharaa.digitalapp.domain.entity.TaskInfo
 
 @Entity("task_info_table")
 data class TaskInfoEntity(
@@ -32,4 +36,32 @@ data class TaskInfoEntity(
     val wageType: String? = null, // 10 Aufbau
     @ColumnInfo("working_time")
     val workingTime: String? = null // null
-)
+) {
+    fun toTaskInfo(): TaskInfo {
+        val color = try {
+            Color(android.graphics.Color.parseColor(colorCode))
+        } catch (e: StringIndexOutOfBoundsException) {
+            Log.e("TaskInfoMapper", "toTaskInfo: $e")
+
+            null
+        }
+
+        return TaskInfo(
+            id = id,
+            businessUnit = businessUnit ?: "", // Gerüstbau
+            businessUnitKey = businessUnitKey ?: "", // Gerüstbau
+            color = color ?: Gray, // #1df70e
+            description = description ?: "", // Gerüste montieren.
+            isAvailableInTimeTrackingKioskMode = isAvailableInTimeTrackingKioskMode
+                ?: false, // false
+            parentTaskID = parentTaskID ?: "",
+            preplanningBoardQuickSelect = preplanningBoardQuickSelect ?: "", // null
+            sort = sort ?: "0", // 0
+            task = task ?: "", // 10 Aufbau
+            title = title ?: "", // Gerüst montieren
+            wageType = wageType ?: "", // 10 Aufbau
+            workingTime = workingTime ?: "" // null
+
+        )
+    }
+}

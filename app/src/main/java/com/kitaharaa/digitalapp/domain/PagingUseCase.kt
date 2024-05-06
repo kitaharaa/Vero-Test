@@ -4,10 +4,9 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.kitaharaa.digitalapp.common.mapper.toTaskInfo
+import com.kitaharaa.digitalapp.common.sort_types.SortType
 import com.kitaharaa.digitalapp.domain.entity.TaskInfo
 import com.kitaharaa.digitalapp.domain.paging.PagingListItemsSource
-import com.kitaharaa.digitalapp.presentation.home.entity.SortType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -22,7 +21,7 @@ class PagingUseCase @Inject constructor(
         return Pager(
             PagingConfig(
                 pageSize = 5,
-                enablePlaceholders = false,
+                enablePlaceholders = true,
             ),
             pagingSourceFactory = {
                 when (type) {

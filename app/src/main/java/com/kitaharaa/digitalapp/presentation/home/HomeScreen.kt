@@ -6,11 +6,15 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,8 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
@@ -33,11 +39,13 @@ import com.kitaharaa.digitalapp.R
 import com.kitaharaa.digitalapp.isCameraPermissionGranted
 import com.kitaharaa.digitalapp.presentation.home.composable.CustomSearchBar
 import com.kitaharaa.digitalapp.presentation.home.composable.FilterDialog
+import com.kitaharaa.digitalapp.presentation.home.composable.LoadingProgressBar
 import com.kitaharaa.digitalapp.presentation.home.composable.TaskInfoCard
 import com.kitaharaa.digitalapp.presentation.qr.CaptureActivity
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.flowOf
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen() {
     val viewModel = hiltViewModel<HomeViewModel>()
@@ -77,12 +85,22 @@ fun HomeScreen() {
             if (isGranted) {
                 barLauncher.launch(options)
             } else {
-                Toast.makeText(context, "Permission was not granted!", Toast.LENGTH_SHORT)
+                Toast.makeText(context,
+                    context.getString(R.string.permission_was_not_granted), Toast.LENGTH_SHORT)
                     .show()
             }
         }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
+                        shouldShowFilteringDialog = true
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             ExtendedFloatingActionButton(
                 onClick = {
@@ -97,7 +115,7 @@ fun HomeScreen() {
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_qr_code_scanner_24),
-                    contentDescription = "Floating action button."
+                    contentDescription = stringResource(R.string.floating_action_button)
                 )
             }
         }
@@ -106,25 +124,51 @@ fun HomeScreen() {
             state = swipeRefreshState,
             onRefresh = viewModel::onRefreshData
         ) {
-            LazyColumn(
-                modifier = Modifier.padding(it)
+            Column(
+                modifier = Modifier.fillMaxSize(),
             ) {
-                item {
-                    CustomSearchBar(searchQuery, viewModel::onQueryUpdate) {
-                        shouldShowFilteringDialog = true
+
+                when {
+                    pagingData.loadState.refresh is LoadState.Loading -> {
+                        //first loading
+                        LoadingProgressBar(
+                            text = stringResource(R.string.initial_loading),
+                            showProgressBar = true
+                        )
                     }
-                }
 
-                items(
-                    count = pagingData.itemCount,
-                    key = pagingData.itemKey { taskInfo ->
-                        taskInfo.id
-                    },
-                    contentType = pagingData.itemContentType { "Tasks" }
-                ) { index ->
+                    pagingData.itemCount == 0 -> {
+                        LoadingProgressBar(
+                            text = stringResource(R.string.there_is_no_data),
+                            showProgressBar = false
+                        )
+                    }
 
-                    pagingData[index]?.let { info ->
-                        TaskInfoCard(info)
+                    pagingData.loadState.append is LoadState.Loading -> {
+                        //add progress
+                        LoadingProgressBar(
+                            text = stringResource(R.string.loading),
+                            showProgressBar = true
+                        )
+                    }
+
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier.padding(it),
+                        ) {
+                            items(
+                                count = pagingData.itemCount,
+                                key = pagingData.itemKey { taskInfo ->
+                                    taskInfo.id
+                                },
+                                contentType = pagingData.itemContentType { context.getString(R.string.tasks) }
+                            ) { index ->
+
+                                pagingData[index]?.let { info ->
+                                    TaskInfoCard(info)
+                                }
+                            }
+                        }
                     }
                 }
             }
