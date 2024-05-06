@@ -3,12 +3,8 @@ package com.kitaharaa.digitalapp.presentation.home
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.map
-import com.kitaharaa.digitalapp.common.mapper.toTaskInfo
+import com.kitaharaa.digitalapp.domain.PagingUseCase
 import com.kitaharaa.digitalapp.domain.RefreshDataUseCase
-import com.kitaharaa.digitalapp.domain.paging.PagingListItemsSource
 import com.kitaharaa.digitalapp.presentation.home.entity.SortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -16,15 +12,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @FlowPreview
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val pagingListItemsSource: PagingListItemsSource,
-    private val refreshDataUseCase: RefreshDataUseCase
+    private val refreshDataUseCase: RefreshDataUseCase,
+    private val pagingUseCase: PagingUseCase
 ) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
@@ -36,31 +31,7 @@ class HomeViewModel @Inject constructor(
     val isRefreshing = _isRefreshing.asStateFlow()
 
     val mList = _searchQuery.debounce(400).combine(_sortType) { query, type ->
-        Pager(
-            PagingConfig(
-                pageSize = 5,
-                enablePlaceholders = false,
-            ),
-            pagingSourceFactory = {
-                when (type) {
-                    SortType.Default -> pagingListItemsSource.getDefaultWithQuery(
-                        query
-                    )
-
-                    SortType.BusinessUnitAsc -> pagingListItemsSource.getSortedByBusinessUnitAsc(
-                        query
-                    )
-
-                    SortType.BusinessUnitDesc -> pagingListItemsSource.getSortedByBusinessUnitDesc(
-                        query
-                    )
-                }
-            }
-        ).flow.map {
-            it.map { entity ->
-                entity.toTaskInfo()
-            }
-        }
+        pagingUseCase.getPagingItemsFlow(query, type)
     }
 
     fun onQueryUpdate(query: String) {
