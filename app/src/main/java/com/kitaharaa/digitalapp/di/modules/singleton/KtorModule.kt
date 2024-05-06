@@ -1,6 +1,7 @@
-package com.kitaharaa.digitalapp.di.modules
+package com.kitaharaa.digitalapp.di.modules.singleton
 
 import android.util.Log
+import com.kitaharaa.digitalapp.data.remote.AuthorizationDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,7 +17,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.request.accept
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import java.net.ConnectException
 import java.net.NoRouteToHostException
@@ -25,12 +25,10 @@ import java.net.ProtocolException
 import java.net.SocketException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
-const val DEFAULT_DELAY_SECONDS = 15L
-const val DEFAULT_MAX_RETRIES = 4
-const val time = 30_000L
+const val DEFAULT_MAX_RETRIES = 2
+const val time = 15_000L
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,7 +38,7 @@ class KtorModule {
     fun provideKtorClient() = HttpClient(Android) {
         // Logging
         install(Logging) {
-        /*    if (BuildConfig.DEBUG) */
+        /*    if (BuildConfig.DEBUG){} */
                 level = LogLevel.ALL
 
                 logger = object : io.ktor.client.plugins.logging.Logger {
@@ -48,7 +46,6 @@ class KtorModule {
                         Log.d("Ktor", message)
                     }
                 }
-
         }
 
         // JSON
@@ -67,9 +64,7 @@ class KtorModule {
             maxRetries = DEFAULT_MAX_RETRIES
             retryOnException(DEFAULT_MAX_RETRIES)
             retryOnServerErrors(DEFAULT_MAX_RETRIES)
-            retryIf { _, response ->
-                response.status.isSuccess().not()
-            }
+
             retryOnExceptionIf { _, cause ->
                 (cause is UnknownHostException) or
                         (cause is SocketTimeoutException) or
@@ -77,12 +72,7 @@ class KtorModule {
                         (cause is NoRouteToHostException) or
                         (cause is PortUnreachableException) or
                         (cause is ProtocolException) or
-                        (cause is SocketException) or
-                        (cause is Exception)
-            }
-
-            delayMillis { retry ->
-                retry * TimeUnit.SECONDS.toMillis(DEFAULT_DELAY_SECONDS)
+                        (cause is SocketException)
             }
         }
 
@@ -92,4 +82,8 @@ class KtorModule {
             accept(ContentType.Application.Json)
         }
     }
+
+    @Provides
+    @Singleton
+    fun provideAuthorizationDataSource(httpClient: HttpClient) = AuthorizationDataSource(httpClient)
 }

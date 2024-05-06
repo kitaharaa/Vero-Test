@@ -9,8 +9,6 @@ import androidx.navigation.compose.rememberNavController
 import com.kitaharaa.digitalapp.common.theme.VeroTaskTheme
 import com.kitaharaa.digitalapp.presentation.home.HomeScreen
 import com.kitaharaa.digitalapp.presentation.navigation.AppNavigation
-import com.kitaharaa.digitalapp.presentation.qr.QrReaderScreen
-import com.kitaharaa.digitalapp.presentation.search.SearchScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,12 +21,6 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController, AppNavigation.Home.route) {
                     composable(AppNavigation.Home.route) {
                         HomeScreen()
-                    }
-                    composable(AppNavigation.Search.route) {
-                        SearchScreen()
-                    }
-                    composable(AppNavigation.QrReader.route) {
-                        QrReaderScreen()
                     }
                 }
             }
